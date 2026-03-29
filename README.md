@@ -1,4 +1,4 @@
-# Fraud Detection API
+# Fraud Detection
 
 > Real-time ML inference API - XGBoost · LightGBM · MLflow · FastAPI · Docker
 
