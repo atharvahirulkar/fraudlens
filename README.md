@@ -11,7 +11,7 @@
 
 ## What this is
 
-FraudLens is a production-grade ML system that trains, tracks, and serves a fraud detection model — and explains every prediction using a RAG-powered explanation engine. XGBoost and LightGBM are compared across 20+ MLflow experiment runs on the IEEE-CIS Fraud Detection dataset. The best model by AUC-PR is registered in the MLflow model registry, containerized, and deployed to AWS App Runner. A Qdrant-backed RAG layer retrieves fraud pattern context and generates natural language explanations for each flagged transaction. A daily Airflow DAG scores new batches and writes results to S3 + Athena.
+FraudLens is a production-grade ML system that trains, tracks, and serves a fraud detection model - and explains every prediction using a RAG-powered explanation engine. XGBoost and LightGBM are compared across 20+ MLflow experiment runs on the IEEE-CIS Fraud Detection dataset. The best model by AUC-PR is registered in the MLflow model registry, containerized, and deployed to AWS App Runner. A Qdrant-backed RAG layer retrieves fraud pattern context and generates natural language explanations for each flagged transaction. A daily Airflow DAG scores new batches and writes results to S3 + Athena.
 
 The focus is the full production loop: reproducible training, experiment tracking, cloud deployment, explainability, and orchestrated batch inference.
 
@@ -159,7 +159,7 @@ fraudlens/
 ### `POST /explain`
 
 ```json
-// Request — same schema as /predict
+// Request - same schema as /predict
 // Response
 {
   "shap_values": {
@@ -239,7 +239,7 @@ S3: s3://fraudlens/scored/YYYY-MM-DD/
 Athena: daily fraud rate · top flagged merchants · score distribution
 ```
 
-Athena queries run directly on Parquet files in S3 — no separate database to manage.
+Athena queries run directly on Parquet files in S3 - no separate database to manage.
 
 ---
 
@@ -256,7 +256,7 @@ Both models are evaluated across multiple hyperparameter configurations in MLflo
 | `confusion_matrix` | At 0.5 + optimal threshold |
 | `model` | Serialized artifact |
 
-Best run by AUC-PR is promoted to `production` in the MLflow model registry. `predictor.py` loads this at API startup — no hardcoded paths.
+Best run by AUC-PR is promoted to `production` in the MLflow model registry. `predictor.py` loads this at API startup - no hardcoded paths.
 
 ---
 
@@ -299,7 +299,7 @@ LOCATION 's3://fraudlens/scored/';
 
 ## Quickstart
 
-> **Prerequisites:** Docker Desktop · Python 3.11+ · Kaggle account (free) · AWS account (AWS Educate — no credit card)
+> **Prerequisites:** Docker Desktop · Python 3.11+ · Kaggle account (free) · AWS account (AWS Educate - no credit card)
 
 ```bash
 # 1. Clone and install
@@ -314,7 +314,7 @@ pip install -r requirements.txt
 # 3. Run training experiments
 python src/train/train.py
 mlflow ui --port 5000
-# Open http://localhost:5000 — compare XGBoost vs LightGBM runs
+# Open http://localhost:5000 - compare XGBoost vs LightGBM runs
 
 # 4. Start Qdrant and ingest fraud patterns
 docker run -d -p 6333:6333 qdrant/qdrant
@@ -367,7 +367,7 @@ curl http://localhost:8000/health
 
 - [ ] EDA notebook (`01_eda.ipynb`)
 - [ ] Feature engineering pipeline (`src/train/features.py`)
-- [ ] MLflow experiment runs — XGBoost + LightGBM (20+ configs)
+- [ ] MLflow experiment runs - XGBoost + LightGBM (20+ configs)
 - [ ] Threshold tuning + SHAP (`src/train/evaluate.py`)
 - [ ] FastAPI service + Pydantic schemas
 - [ ] MLflow model registry integration (`src/api/predictor.py`)
@@ -378,7 +378,7 @@ curl http://localhost:8000/health
 - [ ] Docker image + docker-compose
 - [ ] AWS ECR push + App Runner deploy
 - [ ] S3 model artifact store
-- [ ] Airflow DAG — daily batch scoring → S3 + Athena (`dags/daily_scoring.py`)
+- [ ] Airflow DAG - daily batch scoring → S3 + Athena (`dags/daily_scoring.py`)
 - [ ] GitHub Actions CI/CD (`deploy.yml`)
 - [ ] Latency benchmarks (measured on App Runner)
 
@@ -386,11 +386,11 @@ curl http://localhost:8000/health
 
 ## Dataset
 
-[IEEE-CIS Fraud Detection](https://www.kaggle.com/c/ieee-fraud-detection) — 590K transactions, ~3.5% fraud rate. A heavily imbalanced binary classification problem, making AUC-PR the primary evaluation metric over AUC-ROC.
+[IEEE-CIS Fraud Detection](https://www.kaggle.com/c/ieee-fraud-detection) - 590K transactions, ~3.5% fraud rate. A heavily imbalanced binary classification problem, making AUC-PR the primary evaluation metric over AUC-ROC.
 
 ---
 
 ## Author
 
-**Atharva Hirulkar** — MS Data Science, UC San Diego  
+**Atharva Hirulkar** - MS Data Science, UC San Diego  
 [GitHub](https://github.com/atharvahirulkar) · [LinkedIn](https://linkedin.com/in/atharva-hirulkar)
