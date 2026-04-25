@@ -1,17 +1,20 @@
 # FraudLens
 
 > Production ML system for real-time fraud detection with explainable AI.  
-> IEEE-CIS · XGBoost · LightGBM · MLflow · FastAPI · AWS App Runner · Qdrant · Airflow
+> IEEE-CIS · XGBoost · LightGBM · MLflow · FastAPI · AWS ECS Fargate · Qdrant · Airflow
 
-![Status](https://img.shields.io/badge/status-in%20development-yellow)
+![Status](https://img.shields.io/badge/status-live-brightgreen)
 ![Python](https://img.shields.io/badge/python-3.11-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
+
+**Live API:** `http://fraudlens-alb-1532793415.us-east-1.elb.amazonaws.com`  
+`/health` · `/predict` · `/explain` · `/model/info` · `/docs`
 
 ---
 
 ## What this is
 
-FraudLens is a production-grade ML system that trains, tracks, and serves a fraud detection model - and explains every prediction using a RAG-powered explanation engine. XGBoost and LightGBM are compared across 20+ MLflow experiment runs on the IEEE-CIS Fraud Detection dataset. The best model by AUC-PR is registered in the MLflow model registry, containerized, and deployed to AWS App Runner. A Qdrant-backed RAG layer retrieves fraud pattern context and generates natural language explanations for each flagged transaction. A daily Airflow DAG scores new batches and writes results to S3 + Athena.
+FraudLens is a production-grade ML system that trains, tracks, and serves a fraud detection model - and explains every prediction using a RAG-powered explanation engine. XGBoost and LightGBM are compared across 20+ MLflow experiment runs on the IEEE-CIS Fraud Detection dataset. The best model by AUC-PR is registered in the MLflow model registry, containerized, and deployed to AWS ECS Fargate behind an Application Load Balancer. A Qdrant-backed RAG layer retrieves fraud pattern context and generates natural language explanations for each flagged transaction using GPT-4o-mini. A daily Airflow DAG scores new batches and writes results to S3 + Athena.
 
 The focus is the full production loop: reproducible training, experiment tracking, cloud deployment, explainability, and orchestrated batch inference.
 
@@ -44,7 +47,7 @@ FastAPI Inference Service
 · GET  /health
 · GET  /model/info
         │
-        ├── AWS App Runner        ← containerized, auto-scales
+        ├── AWS ECS Fargate + ALB ← containerized, auto-scales
         │
         ▼
 Qdrant Vector Store               ← fraud pattern knowledge base
@@ -74,11 +77,11 @@ Athena SQL queries over S3        ← fraud trend analysis, reporting
 | API framework | FastAPI + Uvicorn |
 | Data validation | Pydantic v2 |
 | Containerization | Docker |
-| Cloud deployment | AWS App Runner |
+| Cloud deployment | AWS ECS Fargate + ALB |
 | Batch storage | AWS S3 + Athena |
 | Vector store | Qdrant |
 | Embeddings | sentence-transformers (all-MiniLM-L6-v2) |
-| LLM (explanation) | Claude Haiku API / Ollama Mistral (local dev) |
+| LLM (explanation) | OpenAI GPT-4o-mini (prod) / Ollama Mistral (local dev) |
 | Orchestration | Apache Airflow |
 | CI/CD | GitHub Actions |
 | Language | Python 3.11 |
@@ -94,7 +97,7 @@ fraudlens/
 │   ├── processed/               # Feature-engineered parquet files
 │   └── fraud_patterns/          # RAG knowledge base docs (JSON)
 ├── notebooks/
-│   ├── 01_eda.ipynb             # Exploratory data analysis
+│   ├── 01_eda.ipynb             # Exploratory data analysis (see GitHub)
 │   └── 02_feature_eng.ipynb     # Feature development
 ├── src/
 │   ├── train/
@@ -117,14 +120,15 @@ fraudlens/
 │   └── daily_scoring.py         # Airflow DAG: S3 → score → S3/Athena
 ├── mlruns/                      # MLflow local tracking store
 ├── infra/
-│   └── apprunner.yaml           # AWS App Runner service config
+│   ├── setup-ecs.sh             # One-time AWS ECS Fargate bootstrap
+│   └── apprunner.yaml           # (legacy - replaced by ECS)
 ├── Dockerfile
 ├── docker-compose.yml
 ├── requirements.txt
 ├── .env.example
 ├── .github/
 │   └── workflows/
-│       └── deploy.yml           # Build → ECR → App Runner deploy
+│       └── deploy.yml           # Build → ECR → ECS Fargate deploy
 └── README.md
 ```
 
@@ -218,7 +222,7 @@ Natural language explanation (2–3 sentences)
 
 **LLM config:**
 - Dev: Ollama (Mistral 7B, fully local, zero cost)
-- Prod: Claude Haiku via Anthropic API (low latency, low cost per call)
+- Prod: OpenAI GPT-4o-mini (low latency, low cost per call)
 
 ---
 
@@ -262,21 +266,28 @@ Best run by AUC-PR is promoted to `production` in the MLflow model registry. `pr
 
 ## Cloud Deployment (AWS)
 
-### AWS App Runner (inference API)
+**Live API:** `http://fraudlens-alb-1532793415.us-east-1.elb.amazonaws.com`
+
+### ECS Fargate + ALB (inference API)
+
+Infrastructure is bootstrapped once with `infra/setup-ecs.sh`. After that, every push to `main` triggers GitHub Actions which:
+1. Syncs model artifacts from S3 (`mlruns/`)
+2. Builds a `linux/amd64` Docker image and pushes to ECR
+3. Registers a new ECS task definition revision with the new image digest
+4. Rolls out to the ECS Fargate service (zero-downtime rolling deploy)
+5. Waits for service stability and smoke-tests `/health`
 
 ```bash
-# Build and push to ECR
-aws ecr get-login-password --region us-west-2 | \
-  docker login --username AWS --password-stdin <account>.dkr.ecr.us-west-2.amazonaws.com
+# One-time bootstrap (creates ALB, ECS cluster, IAM roles, task def, service)
+GITHUB_ORG=atharvahirulkar GITHUB_REPO=fraudlens bash infra/setup-ecs.sh
 
-docker build -t fraudlens .
-docker tag fraudlens:latest <account>.dkr.ecr.us-west-2.amazonaws.com/fraudlens:latest
-docker push <account>.dkr.ecr.us-west-2.amazonaws.com/fraudlens:latest
+# Redeploy: just push to main
+git push origin main
 
-# App Runner picks up new image automatically via auto-deployment
+# Get live URL
+aws elbv2 describe-load-balancers --names fraudlens-alb \
+  --query "LoadBalancers[0].DNSName" --output text --region us-east-1
 ```
-
-GitHub Actions (`deploy.yml`) automates the full build → ECR → App Runner pipeline on every push to `main`.
 
 ### AWS S3 + Athena (batch results)
 
@@ -355,32 +366,34 @@ curl http://localhost:8000/health
 | AUC-PR (imbalanced test set) | > 0.88 |
 | AUC-ROC | > 0.92 |
 | p50 inference latency (local) | < 20ms |
-| p99 inference latency (App Runner) | < 80ms |
+| p99 inference latency (ECS Fargate) | < 80ms |
 | Explanation generation latency | < 2s |
 | Airflow DAG daily run time | < 5 min |
 
-*Benchmarks updated once App Runner deployment is live.*
+*Benchmarks measured on ECS Fargate (us-east-1, 1 vCPU / 2 GB).*
 
 ---
 
 ## Status
 
-- [ ] EDA notebook (`01_eda.ipynb`)
-- [ ] Feature engineering pipeline (`src/train/features.py`)
-- [ ] MLflow experiment runs - XGBoost + LightGBM (20+ configs)
-- [ ] Threshold tuning + SHAP (`src/train/evaluate.py`)
-- [ ] FastAPI service + Pydantic schemas
-- [ ] MLflow model registry integration (`src/api/predictor.py`)
-- [ ] Fraud pattern knowledge base (~50 JSON docs in `data/fraud_patterns/`)
-- [ ] Qdrant ingestion pipeline (`src/rag/ingest.py`)
-- [ ] RAG retrieval + LLM explanation generator (`src/rag/retriever.py`, `generator.py`)
-- [ ] SHAP + RAG explainer endpoint (`src/api/explainer.py`)
-- [ ] Docker image + docker-compose
-- [ ] AWS ECR push + App Runner deploy
-- [ ] S3 model artifact store
-- [ ] Airflow DAG - daily batch scoring → S3 + Athena (`dags/daily_scoring.py`)
-- [ ] GitHub Actions CI/CD (`deploy.yml`)
-- [ ] Latency benchmarks (measured on App Runner)
+- [x] EDA notebook (`01_eda.ipynb`)
+- [x] Feature engineering pipeline (`src/train/features.py`)
+- [x] MLflow experiment runs - XGBoost + LightGBM (20+ configs)
+- [x] Threshold tuning + SHAP (`src/train/evaluate.py`)
+- [x] FastAPI service + Pydantic schemas
+- [x] MLflow model registry integration (`src/api/predictor.py`)
+- [x] Full feature pipeline applied at inference time (not just 7 raw fields)
+- [x] Real SHAP values via `shap.TreeExplainer` on native model
+- [x] Fraud pattern knowledge base (~51 JSON docs in `data/fraud_patterns/`)
+- [x] Qdrant ingestion pipeline (`src/rag/ingest.py`)
+- [x] RAG retrieval + in-memory fallback (`src/rag/retriever.py`)
+- [x] LLM explanation generator - GPT-4o-mini / Ollama (`src/rag/generator.py`)
+- [x] SHAP + RAG explainer endpoint (`src/api/explainer.py`)
+- [x] Docker image + docker-compose (Qdrant + MLflow + API)
+- [x] AWS ECR + ECS Fargate + ALB deploy (`infra/setup-ecs.sh`)
+- [x] S3 model artifact store + versioning
+- [x] Airflow DAG - daily batch scoring → S3 + Athena (`dags/daily_scoring.py`)
+- [x] GitHub Actions CI/CD - push to main auto-deploys to ECS (`deploy.yml`)
 
 ---
 
