@@ -1,0 +1,129 @@
+name: Build & Deploy to ECS Fargate
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "src/**"
+      - "data/fraud_patterns/**"
+      - "requirements-api.txt"
+      - "Dockerfile"
+      - ".github/workflows/deploy.yml"
+
+env:
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: fraudlens
+  ECS_CLUSTER: fraudlens
+  ECS_SERVICE: fraudlens-inference
+  CONTAINER_NAME: fraudlens-api
+  TASK_FAMILY: fraudlens-inference
+
+jobs:
+  build-and-push:
+    name: Build & Push to ECR
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    outputs:
+      image: ${{ steps.build.outputs.image }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GitHubActionsRole
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Sync model artifacts from S3
+        run: |
+          aws s3 sync s3://${{ secrets.S3_ARTIFACTS_BUCKET }}/mlruns mlruns/ \
+            --region ${{ env.AWS_REGION }}
+
+      - name: Login to ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push Docker image
+        id: build
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build \
+            -t $ECR_REGISTRY/$ECR_REPOSITORY:latest \
+            -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
+            .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> "$GITHUB_OUTPUT"
+
+  deploy-to-ecs:
+    name: Deploy to ECS Fargate
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GitHubActionsRole
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Download current task definition
+        run: |
+          aws ecs describe-task-definition \
+            --task-definition ${{ env.TASK_FAMILY }} \
+            --query taskDefinition \
+            --region ${{ env.AWS_REGION }} \
+            > task-definition.json
+
+      - name: Render new task definition with updated image
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: ${{ env.CONTAINER_NAME }}
+          image: ${{ needs.build-and-push.outputs.image }}
+
+      - name: Deploy to ECS service
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
+
+      - name: Get ALB DNS and smoke test
+        run: |
+          ALB_DNS=$(aws elbv2 describe-load-balancers \
+            --names fraudlens-alb \
+            --query "LoadBalancers[0].DNSName" \
+            --output text \
+            --region ${{ env.AWS_REGION }})
+          echo "API URL: http://$ALB_DNS"
+          # Allow the new task a moment to register with the target group
+          sleep 15
+          curl -f "http://$ALB_DNS/health" | python3 -m json.tool
+
+  notify:
+    name: Deployment Summary
+    runs-on: ubuntu-latest
+    needs: deploy-to-ecs
+    if: always()
+
+    steps:
+      - name: Print result
+        run: |
+          echo "Repository : ${{ github.repository }}"
+          echo "Commit     : ${{ github.sha }}"
+          echo "Branch     : ${{ github.ref_name }}"
+          echo "Result     : ${{ needs.deploy-to-ecs.result }}"
