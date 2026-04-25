@@ -14,7 +14,7 @@
 
 ## What this is
 
-FraudLens is a production-grade ML system that trains, tracks, and serves a fraud detection model — and explains every prediction using a RAG-powered explanation engine. XGBoost and LightGBM are compared across 20+ MLflow experiment runs on the IEEE-CIS Fraud Detection dataset. The best model by AUC-PR is registered in the MLflow model registry, containerized, and deployed to AWS ECS Fargate behind an Application Load Balancer. A Qdrant-backed RAG layer retrieves fraud pattern context and generates natural language explanations for each flagged transaction using GPT-4o-mini. A daily Airflow DAG scores new batches and writes results to S3 + Athena.
+FraudLens is a production-grade ML system that trains, tracks, and serves a fraud detection model - and explains every prediction using a RAG-powered explanation engine. XGBoost and LightGBM are compared across 20+ MLflow experiment runs on the IEEE-CIS Fraud Detection dataset. The best model by AUC-PR is registered in the MLflow model registry, containerized, and deployed to AWS ECS Fargate behind an Application Load Balancer. A Qdrant-backed RAG layer retrieves fraud pattern context and generates natural language explanations for each flagged transaction using GPT-4o-mini. A daily Airflow DAG scores new batches and writes results to S3 + Athena.
 
 The focus is the full production loop: reproducible training, experiment tracking, cloud deployment, explainability, and orchestrated batch inference.
 
@@ -121,7 +121,7 @@ fraudlens/
 ├── mlruns/                      # MLflow local tracking store
 ├── infra/
 │   ├── setup-ecs.sh             # One-time AWS ECS Fargate bootstrap
-│   └── apprunner.yaml           # (legacy — replaced by ECS)
+│   └── apprunner.yaml           # (legacy - replaced by ECS)
 ├── Dockerfile
 ├── docker-compose.yml
 ├── requirements.txt
@@ -378,7 +378,7 @@ curl http://localhost:8000/health
 
 - [x] EDA notebook (`01_eda.ipynb`)
 - [x] Feature engineering pipeline (`src/train/features.py`)
-- [x] MLflow experiment runs — XGBoost + LightGBM (20+ configs)
+- [x] MLflow experiment runs - XGBoost + LightGBM (20+ configs)
 - [x] Threshold tuning + SHAP (`src/train/evaluate.py`)
 - [x] FastAPI service + Pydantic schemas
 - [x] MLflow model registry integration (`src/api/predictor.py`)
@@ -387,13 +387,13 @@ curl http://localhost:8000/health
 - [x] Fraud pattern knowledge base (~51 JSON docs in `data/fraud_patterns/`)
 - [x] Qdrant ingestion pipeline (`src/rag/ingest.py`)
 - [x] RAG retrieval + in-memory fallback (`src/rag/retriever.py`)
-- [x] LLM explanation generator — GPT-4o-mini / Ollama (`src/rag/generator.py`)
+- [x] LLM explanation generator - GPT-4o-mini / Ollama (`src/rag/generator.py`)
 - [x] SHAP + RAG explainer endpoint (`src/api/explainer.py`)
 - [x] Docker image + docker-compose (Qdrant + MLflow + API)
 - [x] AWS ECR + ECS Fargate + ALB deploy (`infra/setup-ecs.sh`)
 - [x] S3 model artifact store + versioning
-- [x] Airflow DAG — daily batch scoring → S3 + Athena (`dags/daily_scoring.py`)
-- [x] GitHub Actions CI/CD — push to main auto-deploys to ECS (`deploy.yml`)
+- [x] Airflow DAG - daily batch scoring → S3 + Athena (`dags/daily_scoring.py`)
+- [x] GitHub Actions CI/CD - push to main auto-deploys to ECS (`deploy.yml`)
 
 ---
 
