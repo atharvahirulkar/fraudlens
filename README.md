@@ -384,7 +384,7 @@ curl http://localhost:8000/health
 - [x] MLflow model registry integration (`src/api/predictor.py`)
 - [x] Full feature pipeline applied at inference time (not just 7 raw fields)
 - [x] Real SHAP values via `shap.TreeExplainer` on native model
-- [x] Fraud pattern knowledge base (~51 JSON docs in `data/fraud_patterns/`)
+- [x] Fraud pattern knowledge base (`data/fraud_patterns/`)
 - [x] Qdrant ingestion pipeline (`src/rag/ingest.py`)
 - [x] RAG retrieval + in-memory fallback (`src/rag/retriever.py`)
 - [x] LLM explanation generator - GPT-4o-mini / Ollama (`src/rag/generator.py`)
