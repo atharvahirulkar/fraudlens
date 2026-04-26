@@ -1,0 +1,6 @@
+{
+  "id": "merchant-cat-anomaly",
+  "name": "Merchant Category Anomaly: Unusual Merchant Type",
+  "description": "Transaction at merchant category never used by cardholder.",
+  "fraud_rate_pct": 41.3
+}

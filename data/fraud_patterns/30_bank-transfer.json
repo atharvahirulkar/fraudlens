@@ -1,0 +1,6 @@
+{
+  "id": "bank-transfer",
+  "name": "Money Movement: Unusual Bank Transfer Pattern",
+  "description": "Card used to transfer funds or withdraw cash unusually.",
+  "fraud_rate_pct": 48.2
+}

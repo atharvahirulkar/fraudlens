@@ -1,0 +1,6 @@
+{
+  "id": "split-payment",
+  "name": "Split Payment: Amount Split Across Multiple Transactions",
+  "description": "Large purchase split into multiple smaller transactions (structuring).",
+  "fraud_rate_pct": 43.8
+}

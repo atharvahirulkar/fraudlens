@@ -1,0 +1,6 @@
+{
+  "id": "anonymous-email",
+  "name": "Anonymous Email: Temporary or Burner Domain",
+  "description": "Transaction uses temporary email service (ProtonMail, 10minutemail) or anonymous domain.",
+  "fraud_rate_pct": 52.1
+}

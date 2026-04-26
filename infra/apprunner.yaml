@@ -1,0 +1,45 @@
+# AWS App Runner Service Configuration - FraudLens inference API
+#
+# One-time create (after running infra/setup.sh):
+#   aws apprunner create-service \
+#     --cli-input-yaml file://infra/apprunner.yaml \
+#     --region us-east-1
+#
+# Subsequent deploys are automatic: pushing :latest to ECR triggers App Runner.
+
+ServiceName: fraudlens-inference
+
+SourceConfiguration:
+  ImageRepository:
+    # Filled in by setup.sh / CI - replace ACCOUNT_ID and REGION if running manually
+    ImageIdentifier: "ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com/fraudlens:latest"
+    ImageConfiguration:
+      Port: "8000"
+      RuntimeEnvironmentVariables:
+        MLFLOW_TRACKING_URI: "file:///app/mlruns"
+        QDRANT_URL: ""          # leave empty; Qdrant not deployed to AWS yet
+        LLM_BACKEND: "openai"
+        # OPENAI_API_KEY injected via App Runner Secrets (not here)
+    ImageRepositoryType: ECR
+  AutoDeploymentsEnabled: true
+  AuthenticationConfiguration:
+    AccessRoleArn: "arn:aws:iam::ACCOUNT_ID:role/AppRunnerECRAccessRole"
+
+InstanceConfiguration:
+  Cpu: "1 vCPU"
+  Memory: "2 GB"
+  # InstanceRoleArn optional - add when API needs to call S3/Secrets Manager at runtime
+
+HealthCheckConfiguration:
+  Protocol: HTTP
+  Path: /health
+  Interval: 30
+  Timeout: 10
+  HealthyThreshold: 1
+  UnhealthyThreshold: 3
+
+Tags:
+  - Key: Environment
+    Value: production
+  - Key: Project
+    Value: FraudLens

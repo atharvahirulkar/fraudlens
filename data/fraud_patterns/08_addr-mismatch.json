@@ -1,0 +1,6 @@
+{
+  "id": "addr-mismatch",
+  "name": "Address Mismatch: Billing \u2260 Shipping",
+  "description": "Billing address (addr1) differs from shipping address (addr2).",
+  "fraud_rate_pct": 34.6
+}

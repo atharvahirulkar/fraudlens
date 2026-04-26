@@ -1,0 +1,6 @@
+{
+  "id": "velocity-low-amt",
+  "name": "Velocity Pattern: Many Low-Value Transactions Rapidly",
+  "description": "Large number of very small transactions in short time.",
+  "fraud_rate_pct": 52.8
+}

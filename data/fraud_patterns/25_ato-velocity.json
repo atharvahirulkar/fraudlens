@@ -1,0 +1,6 @@
+{
+  "id": "ato-velocity",
+  "name": "Account Takeover: Sudden Spike in Account Activity",
+  "description": "Dramatic spike in transaction volume compared to historical average.",
+  "fraud_rate_pct": 59.3
+}

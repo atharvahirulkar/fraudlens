@@ -1,0 +1,6 @@
+{
+  "id": "bot-pattern",
+  "name": "Automated Fraud: Bot-Like Transaction Pattern",
+  "description": "Transactions show perfect regular intervals and amounts.",
+  "fraud_rate_pct": 57.3
+}

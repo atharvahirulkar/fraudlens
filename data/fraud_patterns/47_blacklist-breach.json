@@ -1,0 +1,6 @@
+{
+  "id": "blacklist-breach",
+  "name": "Card Breach Detection: Card on Fraud Blacklist",
+  "description": "Card appears on fraud blacklist or compromised card database.",
+  "fraud_rate_pct": 98.5
+}

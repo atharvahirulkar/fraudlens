@@ -1,0 +1,6 @@
+{
+  "id": "first-txn-high",
+  "name": "First Transaction: Large Amount on New Account",
+  "description": "Account with no prior history makes large purchase on first transaction.",
+  "fraud_rate_pct": 57.8
+}

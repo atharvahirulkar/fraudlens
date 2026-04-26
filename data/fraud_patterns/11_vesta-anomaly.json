@@ -1,0 +1,6 @@
+{
+  "id": "vesta-anomaly",
+  "name": "Vesta Feature Anomaly: Multiple V-Features Outside Bounds",
+  "description": "Multiple Vesta V-features fall outside historical range.",
+  "fraud_rate_pct": 43.8
+}

@@ -1,0 +1,6 @@
+{
+  "id": "refund-fraud",
+  "name": "Product Abuse: Refund Fraud",
+  "description": "Transaction is a refund (ProductCD = R) shortly after initial purchase.",
+  "fraud_rate_pct": 41.2
+}

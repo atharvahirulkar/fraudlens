@@ -1,0 +1,6 @@
+{
+  "id": "late-night-txn",
+  "name": "Temporal Anomaly: Late-Night Transactions",
+  "description": "Unusual late-night (2-5 AM) transactions for cardholder.",
+  "fraud_rate_pct": 39.1
+}

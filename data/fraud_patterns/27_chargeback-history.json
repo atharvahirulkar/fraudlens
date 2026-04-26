@@ -1,0 +1,6 @@
+{
+  "id": "chargeback-history",
+  "name": "Fraud Pattern: Prior Chargeback on Same Card",
+  "description": "Card has history of chargebacks, now showing transaction similar to prior chargeback.",
+  "fraud_rate_pct": 62.1
+}

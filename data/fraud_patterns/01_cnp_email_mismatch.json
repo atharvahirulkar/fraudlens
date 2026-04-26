@@ -1,0 +1,19 @@
+{
+  "id": "cnp-email-mismatch",
+  "name": "Card-Not-Present: Email Domain Mismatch",
+  "description": "Transactions where payer and recipient email domains differ significantly. Common in CNP fraud where attacker uses a free email domain (gmail, yahoo) to receive goods at a different address. Billing and shipping emails don't match — classic fraud indicator.",
+  "feature_signatures": [
+    "p_emaildomain != r_emaildomain",
+    "r_emaildomain in ['anonymous.com', 'protonmail.com', 'temporary-email.com']",
+    "high_dist1 (> 500 km between addresses)",
+    "dist2 > 5000 or dist2 == NaN"
+  ],
+  "shap_signature": {
+    "r_emaildomain": 0.25,
+    "dist1": 0.15,
+    "p_emaildomain": 0.10
+  },
+  "fraud_rate_pct": 35.2,
+  "ieee_cis_context": "Email mismatch is a known strong signal in IEEE-CIS; see public kernels for domain analysis",
+  "typical_amount": "high"
+}

@@ -1,0 +1,6 @@
+{
+  "id": "c-feature-spike",
+  "name": "Card Usage Spike: C-Features Exceed Threshold",
+  "description": "Card usage (C-feature aggregates) spike dramatically.",
+  "fraud_rate_pct": 47.5
+}

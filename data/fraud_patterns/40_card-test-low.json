@@ -1,0 +1,6 @@
+{
+  "id": "card-test-low",
+  "name": "Card Testing: Low-Value Transaction on New Card",
+  "description": "New card with very low first transaction ($1-$10).",
+  "fraud_rate_pct": 54.7
+}

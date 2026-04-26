@@ -1,0 +1,6 @@
+{
+  "id": "vpn-transaction",
+  "name": "Network Anomaly: Transaction from VPN/Proxy IP",
+  "description": "Transaction origin IP detected as VPN or proxy service.",
+  "fraud_rate_pct": 44.7
+}

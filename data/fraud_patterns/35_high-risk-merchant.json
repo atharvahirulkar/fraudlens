@@ -1,0 +1,6 @@
+{
+  "id": "high-risk-merchant",
+  "name": "High-Risk Merchant: Known Fraud Magnet",
+  "description": "Transaction at merchant with historically high fraud rate.",
+  "fraud_rate_pct": 46.3
+}

@@ -1,0 +1,6 @@
+{
+  "id": "cashback-abuse",
+  "name": "Cashback Abuse: Fraudulent Use for Cashback Rewards",
+  "description": "Card used for repeated purchases specifically to earn cashback/rewards.",
+  "fraud_rate_pct": 42.1
+}

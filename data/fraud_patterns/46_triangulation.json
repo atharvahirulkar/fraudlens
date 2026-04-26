@@ -1,0 +1,6 @@
+{
+  "id": "triangulation",
+  "name": "Triangulation Fraud: Three-Party Scheme",
+  "description": "Transaction pattern suggests triangulation (fraudster, victim card, accomplice receiver).",
+  "fraud_rate_pct": 47.8
+}

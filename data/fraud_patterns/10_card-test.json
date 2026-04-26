@@ -1,0 +1,6 @@
+{
+  "id": "card-test",
+  "name": "Card Test: Low-Value Transactions on Inactive Card",
+  "description": "Card activated but never used, then sudden low-value transactions.",
+  "fraud_rate_pct": 56.3
+}

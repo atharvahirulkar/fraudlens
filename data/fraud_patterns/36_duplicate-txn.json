@@ -1,0 +1,6 @@
+{
+  "id": "duplicate-txn",
+  "name": "Duplicate Detection: Exact Same Transaction Within Minutes",
+  "description": "Identical transaction occurs twice within short time.",
+  "fraud_rate_pct": 72.4
+}

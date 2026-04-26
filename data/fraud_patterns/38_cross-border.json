@@ -1,0 +1,6 @@
+{
+  "id": "cross-border",
+  "name": "Cross-Border Abuse: High-Value International Transaction",
+  "description": "High-value transaction to different country combined with new recipient.",
+  "fraud_rate_pct": 49.7
+}

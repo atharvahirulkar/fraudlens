@@ -1,0 +1,6 @@
+{
+  "id": "identity-age-mismatch",
+  "name": "Age Mismatch: Transaction Patterns Inconsistent with ID Age",
+  "description": "Cardholder identity age doesn't match transaction pattern.",
+  "fraud_rate_pct": 36.4
+}

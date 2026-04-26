@@ -1,0 +1,6 @@
+{
+  "id": "multi-decline",
+  "name": "Multiple Declines Then Success: Eventual Authorization After Failures",
+  "description": "Card declined multiple times, then sudden successful transaction.",
+  "fraud_rate_pct": 61.3
+}

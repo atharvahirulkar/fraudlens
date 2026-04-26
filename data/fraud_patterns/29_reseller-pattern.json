@@ -1,0 +1,6 @@
+{
+  "id": "reseller-pattern",
+  "name": "Reseller Fraud: High-Volume Small Seller",
+  "description": "Cardholder shows pattern of small frequent purchases, then sudden bulk purchases.",
+  "fraud_rate_pct": 45.6
+}

@@ -1,0 +1,6 @@
+{
+  "id": "m-flag-anomaly",
+  "name": "M-Flag Anomaly: Unusual Missing Patterns",
+  "description": "M-flags show unusual pattern suggesting data quality issues or spoofed merchant.",
+  "fraud_rate_pct": 37.4
+}

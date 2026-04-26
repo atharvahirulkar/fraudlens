@@ -1,0 +1,6 @@
+{
+  "id": "gift-card-abuse",
+  "name": "Gift Card Abuse: Rapid Gift Card Purchases",
+  "description": "Multiple gift card purchases on same card in short time.",
+  "fraud_rate_pct": 51.7
+}

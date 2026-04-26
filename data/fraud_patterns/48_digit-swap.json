@@ -1,0 +1,6 @@
+{
+  "id": "digit-swap",
+  "name": "Data Entry Error Exploitation: Likely Swapped Digits",
+  "description": "Transaction details suggest common data entry errors (digit swap, transposition).",
+  "fraud_rate_pct": 32.1
+}

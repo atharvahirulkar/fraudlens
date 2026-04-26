@@ -1,0 +1,19 @@
+{
+  "id": "geo-impossible-travel",
+  "name": "Geographic Impossibility: Same Card Used Across Continents",
+  "description": "Card used in transaction, then another transaction in geographically distant location in impossibly short timeframe. Physical impossibility suggests compromised card credentials.",
+  "feature_signatures": [
+    "dist1 > 1000 OR dist2 > 5000",
+    "time_since_last_txn < 3600 seconds",
+    "country_change in last txn",
+    "V_features indicate anomaly"
+  ],
+  "shap_signature": {
+    "dist1": 0.32,
+    "dist2": 0.20,
+    "hour": 0.15
+  },
+  "fraud_rate_pct": 51.8,
+  "ieee_cis_context": "Distance-based detection in IEEE-CIS",
+  "typical_amount": "mixed"
+}

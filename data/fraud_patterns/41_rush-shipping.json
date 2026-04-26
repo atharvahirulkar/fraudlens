@@ -1,0 +1,6 @@
+{
+  "id": "rush-shipping",
+  "name": "Urgency Signal: Rush Shipping Ordered",
+  "description": "Card flagged for fraud risk but customer requests rush shipping.",
+  "fraud_rate_pct": 67.2
+}

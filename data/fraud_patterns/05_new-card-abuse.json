@@ -1,0 +1,6 @@
+{
+  "id": "new-card-abuse",
+  "name": "New Card: Immediate High-Value Transactions",
+  "description": "Card created recently (< 7 days), immediately used for high-value or multiple transactions.",
+  "fraud_rate_pct": 45.7
+}

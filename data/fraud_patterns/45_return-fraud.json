@@ -1,0 +1,6 @@
+{
+  "id": "return-fraud",
+  "name": "Return Fraud: Overstated Returns",
+  "description": "Customer returns more value than originally purchased.",
+  "fraud_rate_pct": 55.4
+}

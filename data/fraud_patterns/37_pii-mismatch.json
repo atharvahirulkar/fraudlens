@@ -1,0 +1,6 @@
+{
+  "id": "pii-mismatch",
+  "name": "PII Mismatch: Multiple Mismatches in Personal Data",
+  "description": "Multiple PII fields don't match (name, email, phone).",
+  "fraud_rate_pct": 55.2
+}

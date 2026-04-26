@@ -1,0 +1,19 @@
+{
+  "id": "velocity-high-transactions",
+  "name": "Velocity Abuse: Multiple High-Value Transactions",
+  "description": "Many high-value transactions in short time period (minutes to hours) from same card. Fraudster tries to maximize stolen card value before card is blocked. Unusual for legitimate users.",
+  "feature_signatures": [
+    "transaction_amt > 500",
+    "C1 > 10 in last 1 hour",
+    "time_since_last_txn < 300 seconds",
+    "amount_zscore > 3.0"
+  ],
+  "shap_signature": {
+    "C1": 0.28,
+    "transaction_amt": 0.20,
+    "hour": 0.12
+  },
+  "fraud_rate_pct": 42.5,
+  "ieee_cis_context": "Velocity abuse detected via C-features (card aggregates)",
+  "typical_amount": "high"
+}

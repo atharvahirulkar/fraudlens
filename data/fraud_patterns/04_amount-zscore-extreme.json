@@ -1,0 +1,6 @@
+{
+  "id": "amount-zscore-extreme",
+  "name": "Amount Anomaly: Extreme Z-Score",
+  "description": "Transaction amount is extreme outlier for this cardholder (z-score > 4.0).",
+  "fraud_rate_pct": 48.3
+}

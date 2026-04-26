@@ -1,0 +1,6 @@
+{
+  "id": "card-type-mismatch",
+  "name": "Card Type Mismatch: Credit Fraud on Debit Account",
+  "description": "Transaction type (debit/credit) doesn't match historical pattern for card.",
+  "fraud_rate_pct": 33.8
+}

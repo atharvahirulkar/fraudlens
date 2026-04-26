@@ -1,0 +1,6 @@
+{
+  "id": "micro-txn-chain",
+  "name": "Probe Fraud: Chain of Micro-Transactions",
+  "description": "Multiple very small transactions ($0.50-$5) in rapid succession.",
+  "fraud_rate_pct": 53.2
+}

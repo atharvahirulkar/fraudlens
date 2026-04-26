@@ -1,0 +1,6 @@
+{
+  "id": "d-feature-outlier",
+  "name": "Behavioral Anomaly: D-Features Outside Historical Range",
+  "description": "D-features show pattern never seen for this cardholder.",
+  "fraud_rate_pct": 42.1
+}

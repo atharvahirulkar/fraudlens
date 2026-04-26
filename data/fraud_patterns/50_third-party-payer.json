@@ -1,0 +1,6 @@
+{
+  "id": "third-party-payer",
+  "name": "Third-Party Payment: Unexpected Payer Change",
+  "description": "Payment account changed to different person or entity.",
+  "fraud_rate_pct": 51.2
+}

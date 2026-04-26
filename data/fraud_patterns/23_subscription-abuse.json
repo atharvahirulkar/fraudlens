@@ -1,0 +1,6 @@
+{
+  "id": "subscription-abuse",
+  "name": "Subscription Fraud: Rapid Subscription Sign-Ups",
+  "description": "Multiple subscription sign-ups on same card in short time.",
+  "fraud_rate_pct": 49.8
+}

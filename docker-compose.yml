@@ -1,0 +1,91 @@
+services:
+  # - MLflow Experiment Tracking
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v3.11.1
+    container_name: fraudlens-mlflow
+    ports:
+      - "5001:5000"
+    volumes:
+      - ./mlruns:/mlflow/mlruns
+      - ./artifacts:/mlflow/artifacts
+    environment:
+      MLFLOW_TRACKING_URI: "http://localhost:5000"
+    command: mlflow server --host 0.0.0.0 --port 5000 --backend-store-uri file:/mlflow/mlruns
+
+  # - Qdrant Vector Store
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: fraudlens-qdrant
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    environment:
+      QDRANT_API_KEY: ""  # No auth for local dev
+
+  # - FraudLens Inference API
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fraudlens-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src:/app/src
+      - ./data:/app/data
+      - ./mlruns:/app/mlruns
+    environment:
+      MLFLOW_TRACKING_URI: "http://mlflow:5000"
+      QDRANT_URL: "http://qdrant:6333"
+      LLM_BACKEND: "openai"  # Use "ollama" for local LLM
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      PYTHONUNBUFFERED: "1"
+    depends_on:
+      - mlflow
+      - qdrant
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # - Ollama (Optional: Local LLM)
+  # Uncomment to use local Mistral instead of Claude Haiku
+  # ollama:
+  #   image: ollama/ollama:latest
+  #   container_name: fraudlens-ollama
+  #   ports:
+  #     - "11434:11434"
+  #   volumes:
+  #     - ollama_data:/root/.ollama
+  #   environment:
+  #     OLLAMA_HOST: "0.0.0.0:11434"
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 3
+
+volumes:
+  qdrant_data:
+
+networks:
+  default:
+    name: fraudlens-net
+
+# - Usage
+# Start all services:
+#   docker compose up -d
+#
+# View logs:
+#   docker compose logs -f api
+#
+# Stop all services:
+#   docker compose down
+#
+# Access endpoints:
+#   MLflow UI:    http://localhost:5001
+#   Qdrant UI:    http://localhost:6333/dashboard
+#   API docs:     http://localhost:8000/docs
+#   Health:       http://localhost:8000/health

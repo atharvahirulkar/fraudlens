@@ -1,0 +1,6 @@
+{
+  "id": "threshold-avoidance",
+  "name": "Fraud Pattern: Avoidance of Fraud Filters",
+  "description": "Amount just under common fraud detection threshold.",
+  "fraud_rate_pct": 40.3
+}

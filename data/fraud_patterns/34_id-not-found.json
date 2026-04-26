@@ -1,0 +1,6 @@
+{
+  "id": "id-not-found",
+  "name": "Identity Validation Failure: ID Not Found",
+  "description": "Identity verification returns 'not found' or error.",
+  "fraud_rate_pct": 58.6
+}

@@ -1,0 +1,6 @@
+{
+  "id": "weekend-shift",
+  "name": "Temporal Shift: Weekend Activity for Weekday Cardholder",
+  "description": "Cardholder usually transacts weekdays, but fraudulent transaction on weekend.",
+  "fraud_rate_pct": 35.2
+}

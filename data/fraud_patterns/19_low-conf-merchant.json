@@ -1,0 +1,6 @@
+{
+  "id": "low-conf-merchant",
+  "name": "Merchant Risk: Low Confidence in Merchant Verification",
+  "description": "Merchant failed multiple fraud checks or has low merchant confidence score.",
+  "fraud_rate_pct": 38.7
+}

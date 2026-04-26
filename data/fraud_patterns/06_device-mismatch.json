@@ -1,0 +1,6 @@
+{
+  "id": "device-mismatch",
+  "name": "Device Mismatch: Unusual Device for Cardholder",
+  "description": "Transaction from device ID not previously associated with cardholder.",
+  "fraud_rate_pct": 38.2
+}

@@ -1,0 +1,6 @@
+{
+  "id": "currency-abuse",
+  "name": "Currency Abuse: Unusual International Transactions",
+  "description": "Cardholder based in one country but transaction in different currency/country.",
+  "fraud_rate_pct": 44.2
+}

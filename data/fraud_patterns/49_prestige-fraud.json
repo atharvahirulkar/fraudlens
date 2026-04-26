@@ -1,0 +1,6 @@
+{
+  "id": "prestige-fraud",
+  "name": "Prestige Fraud: Luxury Goods on Compromised Card",
+  "description": "Cardholder never purchases luxury items, suddenly buying expensive goods.",
+  "fraud_rate_pct": 46.9
+}
