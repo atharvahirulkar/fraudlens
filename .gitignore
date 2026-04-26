@@ -8,12 +8,18 @@ data/raw/
 
 # MLflow
 mlruns/
+mlflow.db
 
 # Python
 __pycache__/
 *.pyc
 .venv/
 *.egg-info/
+
+# Generated artifacts
+data/processed/pipeline.pkl
+notebooks/.ipynb_checkpoints/
+training.log
 
 # Mac
 .DS_Store
