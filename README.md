@@ -7,9 +7,6 @@
 ![Python](https://img.shields.io/badge/python-3.11-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-**Live API:** `http://fraudlens-alb-1532793415.us-east-1.elb.amazonaws.com/docs`  
-`/health` · `/predict` · `/explain` · `/model/info` ·
-
 ---
 
 ## What this is
