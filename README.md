@@ -7,6 +7,9 @@
 ![Python](https://img.shields.io/badge/python-3.11-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
+
+Deployment status: API paused to manage AWS costs. Full infrastructure implemented and documented in infra/ and .github/workflows/. To run locally see Quickstart below.
+
 ---
 
 ## What this is
